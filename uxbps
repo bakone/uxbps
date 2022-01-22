@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+usage() {
+  local programs="${programs[@]}"
+  >&2 echo "usage: $(basename $0) <${programs// / | }> arguments..."
+  exit 1
+}
+
+readarray -t < <(compgen -c 'xbps-')
+programs=("${MAPFILE[@]/xbps-/}")
+selected="$1"
+
+if [[ " ${programs[@]} " =~ " ${selected} " ]]; then
+  xbps-${selected} ${@:2}
+else
+  usage
+fi
+
